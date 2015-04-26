@@ -27,9 +27,13 @@ var prefixDirToFiles = function(dir, files) {
     if ( ! Array.isArray(files)) files = [files];
 
     return files.map(function(file) {
-        file = file.replace(dir, '');
-
-        return [dir, file].join('/').replace('//', '/');
+        var isExclude = (file.indexOf('!') === 0);
+        file = file.replace(new RegExp('^!?(' + dir + ')?'), '');
+        file = [dir, file].join('/').replace('//', '/');
+        if (isExclude) {
+            file = '!' + file;
+        }
+        return file;
     });
 };
 
